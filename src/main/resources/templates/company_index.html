@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="ISO-8859-1">
+    <title>Aplicatie Laborator PWeb</title>
+
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+          crossorigin="anonymous">
+
+</head>
+<body>
+
+<div class="container my-2">
+    <h1> Lista companii</h1>
+
+    <a th:href = "@{/companies/showNewEmployeeForm}" class="btn btn-primary btn-sm mb-3"> Adauga companie </a>
+    <a th:href = "@{/showNewEmployeeForm}" class="btn btn-primary btn-sm mb-3"> Adauga angajati </a>
+
+    <table border="1" class = "table table-striped table-responsive-md">
+        <thead>
+        <tr>
+            <th>
+                <a th:href="@{'/companies/page/' + ${currentPage} + '?sortField=Name&sortDir=' + ${reverseSortDir}}">
+                    Nume companie</a>
+            </th>
+            <th>
+                <a th:href="@{'/companies/page/' + ${currentPage} + '?sortField=lastName&sortDir=' + ${reverseSortDir}}">
+                    Adresa companie</a>
+            </th>
+            <th>
+                <a th:href="@{'/companies/page/' + ${currentPage} + '?sortField=email&sortDir=' + ${reverseSortDir}}">
+                    Activitate companie</a>
+            </th>
+            <th> Actiuni </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="company : ${listCompanies}">
+            <td th:text="${company.Name}"></td>
+            <td th:text="${company.Address}"></td>
+            <td th:text="${company.Activity}"></td>
+            <td> <a th:href="@{/companies/showFormForUpdate/{id}(id=${company.Id})}" class="btn btn-primary">Update</a>
+                <a th:href="@{/companies/deleteEmployee/{id}(id=${company.Id})}" class="btn btn-danger">Delete</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div th:if = "${totalPages > 1}">
+        <div class = "row col-sm-10">
+            <div class = "col-sm-2">
+                Randuri totale: [[${totalItems}]]
+            </div>
+            <div class = "col-sm-1">
+					<span th:each="i: ${#numbers.sequence(1, totalPages)}">
+						<a th:if="${currentPage != i}" th:href="@{'/companies/page/' + ${i}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">[[${i}]]</a>
+						<span th:unless="${currentPage != i}">[[${i}]]</span>  &nbsp; &nbsp;
+					</span>
+            </div>
+            <div class = "col-sm-1">
+                <a th:if="${currentPage < totalPages}" th:href="@{'/companies/page/' + ${currentPage + 1}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Urmatoarea pagina</a>
+                <span th:unless="${currentPage < totalPages}">Urmatoarea pagina</span>
+            </div>
+
+            <div class="col-sm-1">
+                <a th:if="${currentPage < totalPages}" th:href="@{'/companies/page/' + ${totalPages}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Ultima pagina</a>
+                <span th:unless="${currentPage < totalPages}">Ultima pagina</span>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
